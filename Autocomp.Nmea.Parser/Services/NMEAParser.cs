@@ -1,5 +1,6 @@
 ﻿using Autocomp.Nmea.Common;
 using Autocomp.Nmea.Parser.Annotations;
+using Autocomp.Nmea.Parser.Extensions;
 using Autocomp.Nmea.Parser.Services.FastParsingStrategies;
 using System.Globalization;
 using System.Reflection;
@@ -9,11 +10,6 @@ namespace Autocomp.Nmea.Parser.Services
     public class NMEAParser
     {
         private readonly IEnumerable<IFastNMEAParsingStrategy> fastStrategies;
-
-        public NMEAParser(IEnumerable<IFastNMEAParsingStrategy> fastStrategies)
-        {
-            this.fastStrategies = fastStrategies;
-        }
 
         private Lazy<IDictionary<string, Type>> messageTypes = new Lazy<IDictionary<string, Type>>(() =>
             typeof(NMEAParser).Assembly.GetTypes()
@@ -26,6 +22,13 @@ namespace Autocomp.Nmea.Parser.Services
             .Where(t => t.Attribute != null)
             .ToDictionary(t => t.Attribute!.Identifier, t => t.Type));
 
+        public NMEAParser(IEnumerable<IFastNMEAParsingStrategy> fastStrategies)
+        {
+            this.fastStrategies = fastStrategies;
+        }
+
+        public static TEnum? ParseEnum<TEnum>(string rawValue) where TEnum : struct => (TEnum?)ParseEnum(typeof(TEnum), rawValue);
+
         public object Parse(string message) => Parse(new NmeaMessage(message));
 
         public object Parse(NmeaMessage message)
@@ -34,7 +37,7 @@ namespace Autocomp.Nmea.Parser.Services
                 throw new InvalidDataException("Nagłówek jest za krótki");
 
             var identifier = message.Header[3..];
-            var queue = new Queue<string>(message.Fields);
+            var queue = new Queue<string>(SanitizeValues(message.Fields, message.Format.Suffix));
             var fastStrategy = fastStrategies.FirstOrDefault(s => s.Identifier == identifier);
             if (fastStrategy != null)
                 return fastStrategy.Parse(queue);
@@ -81,7 +84,34 @@ namespace Autocomp.Nmea.Parser.Services
             if (propertyType == typeof(float) || propertyType == typeof(float?))
                 return float.Parse(rawValue, CultureInfo.InvariantCulture);
 
+            if (propertyType.IsEnum)
+                return ParseEnum(propertyType, rawValue);
+
             return null;
+        }
+
+        private static object? ParseEnum(Type enumType, string rawValue)
+        {
+            var value = enumType.GetEnumValues()
+                    .Cast<Enum>()
+                    .Select(e => new
+                    {
+                        Value = e,
+                        Attribute = e.GetAttribute<NMEAEnumValueAttribute>()
+                    })
+                    .FirstOrDefault(a => a.Attribute?.Value == rawValue);
+            return value?.Value;
+        }
+
+        private static IEnumerable<string> SanitizeValues(IEnumerable<string> values, char suffix)
+        {
+            foreach (var rawValue in values)
+            {
+                if (rawValue.Contains(suffix))
+                    yield return rawValue.Substring(0, rawValue.IndexOf(suffix));
+                else
+                    yield return rawValue;
+            }
         }
     }
 }

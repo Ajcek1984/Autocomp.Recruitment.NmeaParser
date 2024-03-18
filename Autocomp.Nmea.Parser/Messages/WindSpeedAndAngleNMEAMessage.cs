@@ -18,7 +18,7 @@ namespace Autocomp.Nmea.Parser.Messages
         [NMEAField(3)]
         public WindSpeedUnits WindSpeedUnit { get; set; }
 
-        [NMEAField(4)]
+        [NMEABoolField(4, "A", "V")]
         public bool IsDataValid { get; set; }
     }
 }
