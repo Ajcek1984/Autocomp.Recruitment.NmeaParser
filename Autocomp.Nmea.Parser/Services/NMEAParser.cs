@@ -1,5 +1,6 @@
 ﻿using Autocomp.Nmea.Common;
 using Autocomp.Nmea.Parser.Annotations;
+using Autocomp.Nmea.Parser.Services.FastParsingStrategies;
 using System.Globalization;
 using System.Reflection;
 
@@ -7,6 +8,13 @@ namespace Autocomp.Nmea.Parser.Services
 {
     public class NMEAParser
     {
+        private readonly IEnumerable<IFastNMEAParsingStrategy> fastStrategies;
+
+        public NMEAParser(IEnumerable<IFastNMEAParsingStrategy> fastStrategies)
+        {
+            this.fastStrategies = fastStrategies;
+        }
+
         private Lazy<IDictionary<string, Type>> messageTypes = new Lazy<IDictionary<string, Type>>(() =>
             typeof(NMEAParser).Assembly.GetTypes()
             .Where(t => !t.IsAbstract)
@@ -26,6 +34,11 @@ namespace Autocomp.Nmea.Parser.Services
                 throw new InvalidDataException("Nagłówek jest za krótki");
 
             var identifier = message.Header[3..];
+            var queue = new Queue<string>(message.Fields);
+            var fastStrategy = fastStrategies.FirstOrDefault(s => s.Identifier == identifier);
+            if (fastStrategy != null)
+                return fastStrategy.Parse(queue);
+
             if (!messageTypes.Value.ContainsKey(identifier))
                 throw new NotSupportedException($"Wiadomość o identyfikatorze {identifier} nie jest obsługiwana.");
 
@@ -38,7 +51,7 @@ namespace Autocomp.Nmea.Parser.Services
                 .ToArray(); //TODO: Cache
 
             var parsedMessage = Activator.CreateInstance(type)!;
-            var queue = new Queue<string>(message.Fields);
+
             foreach (var property in properties)
             {
                 if (queue.Count == 0)
