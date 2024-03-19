@@ -77,7 +77,7 @@ namespace Autocomp.Nmea.Parser.Services
                 {
                     if (!int.TryParse(splitValue[1], out int i))
                         throw new Exception("Niewłaściwie sformatowana wartość dziesiętna.");
-                    res = res.Add(TimeSpan.FromSeconds(i * Math.Pow(10, splitValue[1].Length)));
+                    res = res.Add(TimeSpan.FromSeconds(i * Math.Pow(0.1d, splitValue[1].Length)));
                 }
                 return res;
             }

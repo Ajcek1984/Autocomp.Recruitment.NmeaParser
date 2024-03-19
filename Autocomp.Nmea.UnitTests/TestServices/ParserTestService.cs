@@ -37,6 +37,19 @@ namespace Autocomp.Nmea.UnitTests.TestServices
                         IsValid = true,
                         TalkerDevice = NMEATalkerDevices.GlobalPositioningSystem
                     }
+                },
+                {
+                    "$GPGLL,3953.88008971,N,10506.75318910,W,034138.11,A,D*7A\r\n", new GeographicalPositionLatLongNMEAMessage
+                    {
+                        Latitude = 3953.88008971m,
+                        LatitudeType = LatitudeTypes.North,
+                        Longitude = 10506.75318910m,
+                        LongitudeType = LongitudeTypes.West,
+                        UTCOfPosition = new TimeSpan(03,41,38),
+                        IsValid = true,
+                        Mode = GeographicalPositionModes.Differential,
+                        TalkerDevice = NMEATalkerDevices.GlobalPositioningSystem
+                    }
                 }
             };
 
