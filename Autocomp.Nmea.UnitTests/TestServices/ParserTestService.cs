@@ -13,29 +13,31 @@ namespace Autocomp.Nmea.UnitTests.TestServices
         }
         public override void Test()
         {
-            Test("$WIMWV,320,R,15.0,M,A*0B\r\n", new WindSpeedAndAngleNMEAMessage
+            var testData = new Dictionary<string, object> {
+                {
+                    "$WIMWV,320,R,15.0,M,A*0B\r\n", new WindSpeedAndAngleNMEAMessage
+                    {
+                        IsDataValid = true,
+                        ReferenceType = NMEAReferenceTypes.Relative,
+                        WindAngle = 320m,
+                        WindSpeed = 15m,
+                        WindSpeedUnit = WindSpeedUnits.MetersPerSecond
+                    }
+                }
+            };
+
+            foreach (var pair in testData)
             {
-                IsDataValid = true,
-                ReferenceType = NMEAReferenceTypes.Relative,
-                WindAngle = 320m,
-                WindSpeed = 15m,
-                WindSpeedUnit = WindSpeedUnits.MetersPerSecond
-            }, false);
-            Test("$WIMWV,320,R,15.0,M,A*0B\r\n", new WindSpeedAndAngleNMEAMessage
-            {
-                IsDataValid = true,
-                ReferenceType = NMEAReferenceTypes.Relative,
-                WindAngle = 320m,
-                WindSpeed = 15m,
-                WindSpeedUnit = WindSpeedUnits.MetersPerSecond
-            }, true);
+                Test(pair.Key, pair.Value, false);
+                Test(pair.Key, pair.Value, true);
+            }
         }
 
-        private void Test<TResult>(string rawMessage, TResult assertionObject, bool disableFastStrategies) where TResult : class
+        private void Test(string rawMessage, object assertionObject, bool disableFastStrategies)
         {
             var result = parser.Parse(rawMessage, disableFastStrategies);
-            Assert.IsTrue(result is TResult);
-            foreach (var property in typeof(TResult).GetProperties())
+            Assert.IsTrue(result.GetType() == assertionObject.GetType());
+            foreach (var property in assertionObject.GetType().GetProperties())
             {
                 var expectedValue = property.GetValue(assertionObject);
                 var actualValue = property.GetValue(result);
