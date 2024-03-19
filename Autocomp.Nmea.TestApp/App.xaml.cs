@@ -1,4 +1,5 @@
 ﻿using Autocomp.Nmea.Parser.Extensions;
+using Autocomp.Nmea.TestApp.Services.AutoFormStrategies;
 using Autocomp.Nmea.TestApp.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
@@ -17,6 +18,9 @@ namespace Autocomp.Nmea.TestApp
             var services = new ServiceCollection();
             services.AddNMEAParser();
             services.AddScoped<MainWindowViewModel>();
+            foreach (var type in typeof(IAutoFormStrategy).Assembly.GetTypes().Where(t => !t.IsAbstract && typeof(IAutoFormStrategy).IsAssignableFrom(t)))
+                services.AddScoped(typeof(IAutoFormStrategy), type);
+
             DependencyScope = services.BuildServiceProvider().CreateScope();
         }
 

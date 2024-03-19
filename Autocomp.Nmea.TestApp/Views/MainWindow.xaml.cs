@@ -1,4 +1,5 @@
-﻿using Autocomp.Nmea.TestApp.ViewModels;
+﻿using Autocomp.Nmea.TestApp.Extensions;
+using Autocomp.Nmea.TestApp.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using System.Windows;
 
@@ -14,7 +15,7 @@ namespace Autocomp.Nmea.TestApp.Views
         public MainWindow()
         {
             InitializeComponent();
-            ViewModel = ((App)Application.Current).DependencyScope.ServiceProvider.GetRequiredService<MainWindowViewModel>();
+            ViewModel = Dependencies.ServiceProvider.GetRequiredService<MainWindowViewModel>();
             DataContext = ViewModel;
         }
 

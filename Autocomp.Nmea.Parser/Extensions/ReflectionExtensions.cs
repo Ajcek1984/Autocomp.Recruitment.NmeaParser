@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 
 namespace Autocomp.Nmea.Parser.Extensions
 {
@@ -10,6 +11,10 @@ namespace Autocomp.Nmea.Parser.Extensions
                         .First()
                         .GetCustomAttribute<TAttribute>();
 
-
+        public static string GetDisplayName(this Enum value)
+        {
+            var fieldInfo = value.GetType().GetRuntimeField(value.ToString());
+            return fieldInfo?.GetCustomAttribute<DisplayAttribute>()?.GetName() ?? fieldInfo?.Name ?? value.ToString();
+        }
     }
 }
