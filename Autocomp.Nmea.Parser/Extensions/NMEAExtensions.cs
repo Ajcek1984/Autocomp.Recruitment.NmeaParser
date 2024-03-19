@@ -1,4 +1,5 @@
 ﻿using Autocomp.Nmea.Common;
+using Autocomp.Nmea.Parser.Resources;
 
 namespace Autocomp.Nmea.Parser.Extensions
 {
@@ -48,19 +49,19 @@ namespace Autocomp.Nmea.Parser.Extensions
         {
             var lastSegment = message.Fields.LastOrDefault();
             if (lastSegment == null)
-                throw new Exception("Wiadomość jest pusta");
+                throw new Exception(CommonResources.MessageIsEmpty);
 
             var indexOfSuffix = lastSegment.IndexOf(message.Format.Suffix);
             if (indexOfSuffix < 0)
-                throw new Exception("Wiadomość nie jest kompletna.");
+                throw new Exception(string.Format(CommonResources.MessageShouldBeSuffixedWith, message.Format.Suffix));
 
             if (lastSegment.Length < indexOfSuffix + 3)
-                throw new Exception("Suma kontrolna jest za krótka");
+                throw new Exception(CommonResources.InvalidCRSSize);
 
             var rawCrc = lastSegment.Substring(indexOfSuffix + 1, 2);
             var bytes = Convert.FromHexString(rawCrc);
             if (bytes.Length != 1)
-                throw new Exception("CRC powinno mieć 1 bajt.");
+                throw new Exception(CommonResources.InvalidCRSSize);
 
             return bytes[0];
         }

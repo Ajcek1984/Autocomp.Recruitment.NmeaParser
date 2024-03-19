@@ -135,6 +135,18 @@
   <data name="GeographicalPositionModes_Simulator" xml:space="preserve">
     <value>Simulator</value>
   </data>
+  <data name="HeaderIsTooShort" xml:space="preserve">
+    <value>Header is too short.</value>
+  </data>
+  <data name="IncorrectlyFormattedDecimalValue" xml:space="preserve">
+    <value>Incorrectly formatted decimal value.</value>
+  </data>
+  <data name="InvalidCRC" xml:space="preserve">
+    <value>Invalid CRC.</value>
+  </data>
+  <data name="InvalidCRSSize" xml:space="preserve">
+    <value>Invalid CRC size.</value>
+  </data>
   <data name="IsDataValid" xml:space="preserve">
     <value>Data valid</value>
   </data>
@@ -149,6 +161,18 @@
   </data>
   <data name="LongitudeType" xml:space="preserve">
     <value>Longitude type</value>
+  </data>
+  <data name="MessageIsEmpty" xml:space="preserve">
+    <value>Message is empty.</value>
+  </data>
+  <data name="MessageShouldBePrefixedWith" xml:space="preserve">
+    <value>Message should be prefixed with {0}.</value>
+  </data>
+  <data name="MessageShouldBeSuffixedWith" xml:space="preserve">
+    <value>Message should be suffixed with {0}.</value>
+  </data>
+  <data name="MessageTypeNotSupported" xml:space="preserve">
+    <value>Message type {0} is not supported.</value>
   </data>
   <data name="Mode" xml:space="preserve">
     <value>Mode</value>

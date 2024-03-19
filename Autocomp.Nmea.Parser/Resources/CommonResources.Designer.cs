@@ -115,6 +115,42 @@ namespace Autocomp.Nmea.Parser.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Header is too short..
+        /// </summary>
+        public static string HeaderIsTooShort {
+            get {
+                return ResourceManager.GetString("HeaderIsTooShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Incorrectly formatted decimal value..
+        /// </summary>
+        public static string IncorrectlyFormattedDecimalValue {
+            get {
+                return ResourceManager.GetString("IncorrectlyFormattedDecimalValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid CRC..
+        /// </summary>
+        public static string InvalidCRC {
+            get {
+                return ResourceManager.GetString("InvalidCRC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid CRC size..
+        /// </summary>
+        public static string InvalidCRSSize {
+            get {
+                return ResourceManager.GetString("InvalidCRSSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data valid.
         /// </summary>
         public static string IsDataValid {
@@ -156,6 +192,42 @@ namespace Autocomp.Nmea.Parser.Resources {
         public static string LongitudeType {
             get {
                 return ResourceManager.GetString("LongitudeType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message is empty..
+        /// </summary>
+        public static string MessageIsEmpty {
+            get {
+                return ResourceManager.GetString("MessageIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message should be prefixed with {0}..
+        /// </summary>
+        public static string MessageShouldBePrefixedWith {
+            get {
+                return ResourceManager.GetString("MessageShouldBePrefixedWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message should be suffixed with {0}..
+        /// </summary>
+        public static string MessageShouldBeSuffixedWith {
+            get {
+                return ResourceManager.GetString("MessageShouldBeSuffixedWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message type {0} is not supported..
+        /// </summary>
+        public static string MessageTypeNotSupported {
+            get {
+                return ResourceManager.GetString("MessageTypeNotSupported", resourceCulture);
             }
         }
         

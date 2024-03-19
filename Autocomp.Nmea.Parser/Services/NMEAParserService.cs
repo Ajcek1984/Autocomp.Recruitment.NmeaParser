@@ -1,6 +1,7 @@
 ﻿using Autocomp.Nmea.Common;
 using Autocomp.Nmea.Parser.Annotations;
 using Autocomp.Nmea.Parser.Extensions;
+using Autocomp.Nmea.Parser.Resources;
 using Autocomp.Nmea.Parser.Services.FastParsingStrategies;
 using System.Globalization;
 
@@ -24,15 +25,15 @@ namespace Autocomp.Nmea.Parser.Services
         public object Parse(NmeaMessage message, bool disableFastStrategies)
         {
             if (!message.Header.StartsWith(message.Format.Prefix))
-                throw new InvalidDataException($"Wiadomość powinna zaczynać się od prefiksu {message.Format.Prefix}.");
+                throw new InvalidDataException(string.Format(CommonResources.MessageShouldBePrefixedWith, message.Format.Prefix));
 
             if (message.Header.Length < 4)
-                throw new InvalidDataException("Nagłówek jest za krótki");
+                throw new InvalidDataException(CommonResources.HeaderIsTooShort);
 
             var calculatedCrc = message.CalculateCrc();
             var embeddedCrc = message.GetCrc();
             if (calculatedCrc != embeddedCrc)
-                throw new InvalidDataException($"Niewłaściwe CRC.");
+                throw new InvalidDataException(CommonResources.InvalidCRC);
 
             var identifier = message.Header[3..];
             var talkerDevice = message.GetTalkerDevice();
@@ -42,7 +43,7 @@ namespace Autocomp.Nmea.Parser.Services
                 return ApplyTalkerDevice(fastStrategy.Parse(queue), message);
 
             if (!cache.MessageTypes.ContainsKey(identifier))
-                throw new NotSupportedException($"Wiadomość o identyfikatorze {identifier} nie jest obsługiwana.");
+                throw new NotSupportedException(string.Format(CommonResources.MessageTypeNotSupported, identifier));
 
             var type = cache.MessageTypes[identifier];
             var properties = cache.GetProperties(type);
@@ -85,7 +86,7 @@ namespace Autocomp.Nmea.Parser.Services
                 if (splitValue.Length > 1)
                 {
                     if (!int.TryParse(splitValue[1], out int i))
-                        throw new Exception("Niewłaściwie sformatowana wartość dziesiętna.");
+                        throw new Exception(CommonResources.IncorrectlyFormattedDecimalValue);
                     res = res.Add(TimeSpan.FromSeconds(i * Math.Pow(0.1d, splitValue[1].Length)));
                 }
                 return res;
