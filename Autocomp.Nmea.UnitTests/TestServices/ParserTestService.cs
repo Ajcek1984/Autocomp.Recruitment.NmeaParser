@@ -15,6 +15,9 @@ namespace Autocomp.Nmea.UnitTests.TestServices
         }
         public override void Test()
         {
+            var waterTempMessage = "$WIMTW,16.5,C*";
+            var waterTempMessageCrc = Convert.ToHexString(new[] { new NmeaMessage(waterTempMessage).CalculateCrc() });
+
             var testData = new Dictionary<string, object> {
                 {
                     "$WIMWV,320,R,15.0,M,A*0B\r\n", new WindSpeedAndAngleNMEAMessage
@@ -51,9 +54,18 @@ namespace Autocomp.Nmea.UnitTests.TestServices
                         Mode = GeographicalPositionModes.Differential,
                         TalkerDevice = NMEATalkerDevices.GlobalPositioningSystem
                     }
+                },
+                {
+                    $"{waterTempMessage}{waterTempMessageCrc}\r\n", new WaterTemperatureNMEAMessage
+                    {
+                        Temperature = 16.5m,
+                        Unit = TemperatureUnits.Celsius
+                    }
                 }
             };
 
+
+            
             foreach (var pair in testData)
             {
                 Test(pair.Key, pair.Value, false);

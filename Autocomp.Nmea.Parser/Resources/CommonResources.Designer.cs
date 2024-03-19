@@ -295,6 +295,24 @@ namespace Autocomp.Nmea.Parser.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Temperature.
+        /// </summary>
+        public static string Temperature {
+            get {
+                return ResourceManager.GetString("Temperature", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Temperature units.
+        /// </summary>
+        public static string TemperatureUnits {
+            get {
+                return ResourceManager.GetString("TemperatureUnits", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to UTC time of position.
         /// </summary>
         public static string UTCOfPosition {

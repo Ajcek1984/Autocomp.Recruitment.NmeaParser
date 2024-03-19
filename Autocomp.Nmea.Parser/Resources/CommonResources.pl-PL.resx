@@ -195,6 +195,12 @@
   <data name="TalkerDevice" xml:space="preserve">
     <value>Urządzenie</value>
   </data>
+  <data name="Temperature" xml:space="preserve">
+    <value>Temperatura</value>
+  </data>
+  <data name="TemperatureUnits" xml:space="preserve">
+    <value>Jednostka temperatury</value>
+  </data>
   <data name="UTCOfPosition" xml:space="preserve">
     <value>Czas UTC pozycji</value>
   </data>
