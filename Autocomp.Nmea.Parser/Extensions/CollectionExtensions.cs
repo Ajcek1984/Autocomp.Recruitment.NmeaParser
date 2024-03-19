@@ -23,7 +23,7 @@ namespace Autocomp.Nmea.Parser.Extensions
         public static TEnum DequeueRequiredEnum<TEnum>(this Queue<string> queue) where TEnum : struct => DequeueEnum<TEnum>(queue) ??
             throw new Exception("Oczekiwano wartości enum.");
 
-        public static bool DequeueBool(this Queue<string> queue, string trueValue, string falseValue)
+        public static bool DequeueRequiredBool(this Queue<string> queue, string trueValue, string falseValue)
         {
             var rawValue = queue.Dequeue();
             if (rawValue == trueValue) return true;

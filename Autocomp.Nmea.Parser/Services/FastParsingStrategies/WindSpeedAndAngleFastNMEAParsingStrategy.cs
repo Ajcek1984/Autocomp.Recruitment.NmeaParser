@@ -14,7 +14,7 @@ namespace Autocomp.Nmea.Parser.Services.FastParsingStrategies
             ReferenceType = values.DequeueRequiredEnum<NMEAReferenceTypes>(),
             WindSpeed = values.DequeueRequiredDecimal(),
             WindSpeedUnit = values.DequeueRequiredEnum<WindSpeedUnits>(),
-            IsDataValid = values.DequeueBool("A", "V")
+            IsDataValid = values.DequeueRequiredBool("A", "V")
         };
     }
 }

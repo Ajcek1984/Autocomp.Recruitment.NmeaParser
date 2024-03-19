@@ -29,16 +29,16 @@ namespace Autocomp.Nmea.Parser.Services
 
         public static TEnum? ParseEnum<TEnum>(string rawValue) where TEnum : struct => (TEnum?)ParseEnum(typeof(TEnum), rawValue);
 
-        public object Parse(string message) => Parse(new NmeaMessage(message));
+        public object Parse(string message, bool disableFastStrategies) => Parse(new NmeaMessage(message), disableFastStrategies);
 
-        public object Parse(NmeaMessage message)
+        public object Parse(NmeaMessage message, bool disableFastStrategies)
         {
             if (message.Header.Length < 4)
                 throw new InvalidDataException("Nagłówek jest za krótki");
 
             var identifier = message.Header[3..];
             var queue = new Queue<string>(SanitizeValues(message.Fields, message.Format.Suffix));
-            var fastStrategy = fastStrategies.FirstOrDefault(s => s.Identifier == identifier);
+            var fastStrategy = !disableFastStrategies ? fastStrategies.FirstOrDefault(s => s.Identifier == identifier) : null;
             if (fastStrategy != null)
                 return fastStrategy.Parse(queue);
 
