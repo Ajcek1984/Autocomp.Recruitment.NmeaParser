@@ -23,6 +23,17 @@ namespace Autocomp.Nmea.UnitTests.TestServices
                         WindSpeed = 15m,
                         WindSpeedUnit = WindSpeedUnits.MetersPerSecond
                     }
+                },
+                {
+                    "$GPGLL,5057.970,N,00146.110,E,142451,A*27\r\n", new GeographicalPositionLatLongNMEAMessage
+                    {
+                        Latitude = 5057.970m,
+                        LatitudeType = LatitudeTypes.North,
+                        Longitude = 00146.110m,
+                        LongitudeType = LongitudeTypes.East,
+                        UTCOfPosition = new TimeSpan(14,24,51),
+                        IsValid = true
+                    }
                 }
             };
 
