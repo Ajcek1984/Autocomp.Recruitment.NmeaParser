@@ -1,7 +1,7 @@
 ﻿namespace Autocomp.Nmea.Parser.Services.FastParsingStrategies
 {
     /// <summary>
-    /// Strategia parsowania wiadomości, umożliwiająca uniknięcie boxingu i refleksji. Stosować w przypadku, 
+    /// Strategia parsowania wiadomości, umożliwiająca ograniczenie boxingu i refleksji. Stosować w przypadku, 
     /// gdy wiadomość określonego typu przychodzi szczególnie często i chcemy zaoszczędzić na wydajności.
     /// Jeśli nie ma zaimplementowanej strategii dla danego typu, użyta zostanie standardowa refleksyjna implementacja parsowania.
     /// </summary>

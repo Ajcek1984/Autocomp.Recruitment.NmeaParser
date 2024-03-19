@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace Autocomp.Nmea.Parser.Services
 {
+    /// <summary>
+    /// Pomocnicza klasa stanowiąca cache właściwości pobranych za pomocą refleksji. Rejestrować jako singleton lub w szerokim skołpie.
+    /// </summary>
     public class NMEAPropertyCache
     {
         private readonly ConcurrentDictionary<Type, NMEAPropertyInfo[]> propertyCache = new ConcurrentDictionary<Type, NMEAPropertyInfo[]>();

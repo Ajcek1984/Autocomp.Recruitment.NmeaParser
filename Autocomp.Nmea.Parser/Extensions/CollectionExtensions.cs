@@ -1,5 +1,4 @@
-﻿using Autocomp.Nmea.Parser.Services;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace Autocomp.Nmea.Parser.Extensions
 {
@@ -17,11 +16,11 @@ namespace Autocomp.Nmea.Parser.Extensions
             return null;
         }
 
-        public static decimal DequeueRequiredDecimal(this Queue<string> queue) => DequeueDecimal(queue) ??
-            throw new Exception("Oczekiwano wartości decimal.");
-
-        public static TEnum DequeueRequiredEnum<TEnum>(this Queue<string> queue) where TEnum : struct => DequeueEnum<TEnum>(queue) ??
-            throw new Exception("Oczekiwano wartości enum.");
+        public static TEnum? DequeueEnum<TEnum>(this Queue<string> queue) where TEnum : struct
+        {
+            var rawValue = queue.Dequeue();
+            return NMEAExtensions.ParseEnum<TEnum>(rawValue);
+        }
 
         public static bool DequeueRequiredBool(this Queue<string> queue, string trueValue, string falseValue)
         {
@@ -31,10 +30,10 @@ namespace Autocomp.Nmea.Parser.Extensions
             throw new Exception($"Oczekiwano wartości {trueValue} lub {falseValue}.");
         }
 
-        public static TEnum? DequeueEnum<TEnum>(this Queue<string> queue) where TEnum : struct
-        {
-            var rawValue = queue.Dequeue();
-            return NMEAParserService.ParseEnum<TEnum>(rawValue);
-        }
+        public static decimal DequeueRequiredDecimal(this Queue<string> queue) => DequeueDecimal(queue) ??
+                            throw new Exception("Oczekiwano wartości decimal.");
+
+        public static TEnum DequeueRequiredEnum<TEnum>(this Queue<string> queue) where TEnum : struct => DequeueEnum<TEnum>(queue) ??
+            throw new Exception("Oczekiwano wartości enum.");
     }
 }

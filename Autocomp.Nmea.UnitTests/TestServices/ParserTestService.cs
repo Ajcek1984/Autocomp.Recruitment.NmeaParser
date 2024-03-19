@@ -64,8 +64,6 @@ namespace Autocomp.Nmea.UnitTests.TestServices
                 }
             };
 
-
-            
             foreach (var pair in testData)
             {
                 Test(pair.Key, pair.Value, false);
