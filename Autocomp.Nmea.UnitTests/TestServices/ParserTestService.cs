@@ -6,8 +6,8 @@ namespace Autocomp.Nmea.UnitTests.TestServices
 {
     public class ParserTestService : TestServiceBase
     {
-        private readonly NMEAParser parser;
-        public ParserTestService(NMEAParser parser)
+        private readonly NMEAParserService parser;
+        public ParserTestService(NMEAParserService parser)
         {
             this.parser = parser;
         }

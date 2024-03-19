@@ -8,7 +8,8 @@ namespace Autocomp.Nmea.Parser.Extensions
     {
         public static IServiceCollection AddNMEAParser(this IServiceCollection services)
         {
-            services.AddScoped<NMEAParser>();
+            services.AddScoped<NMEAParserService>();
+            services.AddSingleton<NMEAPropertyCache>();
 
             foreach (var type in typeof(IFastNMEAParsingStrategy).Assembly.GetTypes().Where(t => !t.IsAbstract && typeof(IFastNMEAParsingStrategy).IsAssignableFrom(t)))
                 services.AddScoped(typeof(IFastNMEAParsingStrategy), type);

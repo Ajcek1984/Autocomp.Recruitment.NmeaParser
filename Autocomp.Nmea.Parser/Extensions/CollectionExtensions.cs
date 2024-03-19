@@ -34,7 +34,7 @@ namespace Autocomp.Nmea.Parser.Extensions
         public static TEnum? DequeueEnum<TEnum>(this Queue<string> queue) where TEnum : struct
         {
             var rawValue = queue.Dequeue();
-            return NMEAParser.ParseEnum<TEnum>(rawValue);
+            return NMEAParserService.ParseEnum<TEnum>(rawValue);
         }
     }
 }

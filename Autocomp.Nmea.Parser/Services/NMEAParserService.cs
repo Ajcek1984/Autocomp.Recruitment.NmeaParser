@@ -3,28 +3,19 @@ using Autocomp.Nmea.Parser.Annotations;
 using Autocomp.Nmea.Parser.Extensions;
 using Autocomp.Nmea.Parser.Services.FastParsingStrategies;
 using System.Globalization;
-using System.Reflection;
 
 namespace Autocomp.Nmea.Parser.Services
 {
-    public class NMEAParser
+    public class NMEAParserService
     {
+
+
+        private readonly NMEAPropertyCache cache;
         private readonly IEnumerable<IFastNMEAParsingStrategy> fastStrategies;
-
-        private Lazy<IDictionary<string, Type>> messageTypes = new Lazy<IDictionary<string, Type>>(() =>
-            typeof(NMEAParser).Assembly.GetTypes()
-            .Where(t => !t.IsAbstract)
-            .Select(t => new
-            {
-                Attribute = t.GetCustomAttribute<NMEAMessageAttribute>(),
-                Type = t
-            })
-            .Where(t => t.Attribute != null)
-            .ToDictionary(t => t.Attribute!.Identifier, t => t.Type));
-
-        public NMEAParser(IEnumerable<IFastNMEAParsingStrategy> fastStrategies)
+        public NMEAParserService(IEnumerable<IFastNMEAParsingStrategy> fastStrategies, NMEAPropertyCache cache)
         {
             this.fastStrategies = fastStrategies;
+            this.cache = cache;
         }
 
         public static TEnum? ParseEnum<TEnum>(string rawValue) where TEnum : struct => (TEnum?)ParseEnum(typeof(TEnum), rawValue);
@@ -42,16 +33,11 @@ namespace Autocomp.Nmea.Parser.Services
             if (fastStrategy != null)
                 return fastStrategy.Parse(queue);
 
-            if (!messageTypes.Value.ContainsKey(identifier))
+            if (!cache.MessageTypes.ContainsKey(identifier))
                 throw new NotSupportedException($"Wiadomość o identyfikatorze {identifier} nie jest obsługiwana.");
 
-            var type = messageTypes.Value[identifier];
-            var properties = type.GetProperties()
-                .Select(p => new { Attribute = p.GetCustomAttribute<NMEAFieldAttribute>(), Property = p })
-                .Where(p => p.Attribute != null)
-                .Select(p => new { Attribute = p.Attribute!, p.Property })
-                .OrderBy(p => p.Attribute.Order)
-                .ToArray(); //TODO: Cache
+            var type = cache.MessageTypes[identifier];
+            var properties = cache.GetProperties(type);
 
             var parsedMessage = Activator.CreateInstance(type)!;
 
@@ -83,6 +69,19 @@ namespace Autocomp.Nmea.Parser.Services
 
             if (propertyType == typeof(float) || propertyType == typeof(float?))
                 return float.Parse(rawValue, CultureInfo.InvariantCulture);
+
+            if (propertyType == typeof(TimeSpan))
+            {
+                var splitValue = rawValue.Split('.');
+                var res = TimeSpan.ParseExact(splitValue[0], "hhmmss", CultureInfo.InvariantCulture);
+                if (splitValue.Length > 1)
+                {
+                    if (!int.TryParse(splitValue[1], out int i))
+                        throw new Exception("Niewłaściwie sformatowana wartość dziesiętna.");
+                    res = res.Add(TimeSpan.FromSeconds(i * Math.Pow(10, splitValue[1].Length)));
+                }
+                return res;
+            }
 
             if (propertyType.IsEnum)
                 return ParseEnum(propertyType, rawValue);

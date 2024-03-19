@@ -21,7 +21,7 @@ namespace Autocomp.Nmea.Parser.Messages
         [NMEAField(4)]
         public TimeSpan UTCOfPosition { get; set; }
 
-        [NMEAField(5)]
+        [NMEABoolField(5, "A", "V")]
         public bool IsValid { get; set; }
 
         [NMEAField(6)]
