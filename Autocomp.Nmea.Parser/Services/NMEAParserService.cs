@@ -8,8 +8,6 @@ namespace Autocomp.Nmea.Parser.Services
 {
     public class NMEAParserService
     {
-
-
         private readonly NMEAPropertyCache cache;
         private readonly IEnumerable<IFastNMEAParsingStrategy> fastStrategies;
         public NMEAParserService(IEnumerable<IFastNMEAParsingStrategy> fastStrategies, NMEAPropertyCache cache)
@@ -32,7 +30,7 @@ namespace Autocomp.Nmea.Parser.Services
             var queue = new Queue<string>(SanitizeValues(message.Fields, message.Format.Suffix));
             var fastStrategy = !disableFastStrategies ? fastStrategies.FirstOrDefault(s => s.Identifier == identifier) : null;
             if (fastStrategy != null)
-                return fastStrategy.Parse(queue);
+                return ApplyTalkerDevice(fastStrategy.Parse(queue), message);
 
             if (!cache.MessageTypes.ContainsKey(identifier))
                 throw new NotSupportedException($"Wiadomość o identyfikatorze {identifier} nie jest obsługiwana.");
@@ -53,7 +51,7 @@ namespace Autocomp.Nmea.Parser.Services
                     property.Property.SetValue(parsedMessage, parsedValue);
             }
 
-            return parsedMessage;
+            return ApplyTalkerDevice(parsedMessage, message);
         }
 
         private static object? GetParsedValue(string rawValue, NMEAFieldAttribute attribute, Type propertyType)
@@ -112,6 +110,24 @@ namespace Autocomp.Nmea.Parser.Services
                 else
                     yield return rawValue;
             }
+        }
+
+        private object ApplyTalkerDevice(object obj, NmeaMessage message)
+        {
+            var talkerDeviceProperty = cache.GetTalkerDeviceProperty(obj.GetType());
+            if (talkerDeviceProperty == null)
+                return obj;
+
+            var rawTalkerDevice = message.GetTalkerDevice();
+            if (string.IsNullOrWhiteSpace(rawTalkerDevice))
+                return obj;
+
+            if (talkerDeviceProperty.PropertyType.IsEnum)
+                talkerDeviceProperty.SetValue(obj, ParseEnum(talkerDeviceProperty.PropertyType, rawTalkerDevice));
+            else if (talkerDeviceProperty.PropertyType == typeof(string))
+                talkerDeviceProperty.SetValue(obj, rawTalkerDevice);
+
+            return obj;
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using Autocomp.Nmea.Common;
 using Autocomp.Nmea.Parser.Enums;
-using Autocomp.Nmea.Parser.Extensions;
 using Autocomp.Nmea.Parser.Messages;
 using Autocomp.Nmea.Parser.Services;
 
@@ -23,7 +22,8 @@ namespace Autocomp.Nmea.UnitTests.TestServices
                         ReferenceType = NMEAReferenceTypes.Relative,
                         WindAngle = 320m,
                         WindSpeed = 15m,
-                        WindSpeedUnit = WindSpeedUnits.MetersPerSecond
+                        WindSpeedUnit = WindSpeedUnits.MetersPerSecond,
+                        TalkerDevice = NMEATalkerDevices.WeatherInstruments
                     }
                 },
                 {
@@ -34,7 +34,8 @@ namespace Autocomp.Nmea.UnitTests.TestServices
                         Longitude = 00146.110m,
                         LongitudeType = LongitudeTypes.East,
                         UTCOfPosition = new TimeSpan(14,24,51),
-                        IsValid = true
+                        IsValid = true,
+                        TalkerDevice = NMEATalkerDevices.GlobalPositioningSystem
                     }
                 }
             };

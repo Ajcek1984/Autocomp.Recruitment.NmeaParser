@@ -6,7 +6,8 @@ namespace Autocomp.Nmea.Parser.Services
 {
     public class NMEAPropertyCache
     {
-        private readonly ConcurrentDictionary<Type, NMEAPropertyInfo[]> innerCache = new ConcurrentDictionary<Type, NMEAPropertyInfo[]>();
+        private readonly ConcurrentDictionary<Type, NMEAPropertyInfo[]> propertyCache = new ConcurrentDictionary<Type, NMEAPropertyInfo[]>();
+        private readonly ConcurrentDictionary<Type, PropertyInfo?> talkerDevicePropertyCache = new ConcurrentDictionary<Type, PropertyInfo?>();
 
         private Lazy<IDictionary<string, Type>> messageTypes = new Lazy<IDictionary<string, Type>>(() =>
                     typeof(NMEAParserService).Assembly.GetTypes()
@@ -22,8 +23,8 @@ namespace Autocomp.Nmea.Parser.Services
 
         public NMEAPropertyInfo[] GetProperties(Type type)
         {
-            if (innerCache.ContainsKey(type))
-                return innerCache[type];
+            if (propertyCache.ContainsKey(type))
+                return propertyCache[type];
 
             var properties = type.GetProperties()
                 .Select(p => new { Attribute = p.GetCustomAttribute<NMEAFieldAttribute>(), Property = p })
@@ -32,8 +33,19 @@ namespace Autocomp.Nmea.Parser.Services
                 .OrderBy(p => p.Attribute.Order)
                 .ToArray();
 
-            innerCache[type] = properties;
+            propertyCache[type] = properties;
             return properties;
+        }
+
+        public PropertyInfo? GetTalkerDeviceProperty(Type type)
+        {
+            if (talkerDevicePropertyCache.ContainsKey(type))
+                return talkerDevicePropertyCache[type];
+
+            var property = type.GetProperties().FirstOrDefault(p => p.GetCustomAttribute<NMEATalkerDeviceAttribute>() != null);
+            talkerDevicePropertyCache[type] = property;
+
+            return property;
         }
     }
 
