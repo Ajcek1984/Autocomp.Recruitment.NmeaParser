@@ -6,6 +6,9 @@ namespace Autocomp.Nmea.Parser.Messages
     [NMEAMessage("MWV")]
     public class WindSpeedAndAngleNMEAMessage
     {
+        [NMEATalkerDevice]
+        public NMEATalkerDevices TalkerDevice { get; set; }
+
         [NMEAField(0)]
         public decimal WindAngle { get; set; }
 

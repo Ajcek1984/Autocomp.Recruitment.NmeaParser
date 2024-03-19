@@ -6,6 +6,9 @@ namespace Autocomp.Nmea.Parser.Messages
     [NMEAMessage("GLL")]
     public class GeographicalPositionLatLongNMEAMessage
     {
+        [NMEATalkerDevice]
+        public NMEATalkerDevices TalkerDevice { get;set; }
+
         [NMEAField(0)]
         public decimal Latitude { get; set; }
 
