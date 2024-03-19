@@ -8,12 +8,16 @@ namespace Autocomp.Nmea.TestApp.ViewModels
     {
         private readonly NMEAParserService parserService;
 
+        private string nmeaMessage = string.Empty;
+
+        private object? parsedMessage;
+
         public MainWindowViewModel(NMEAParserService parserService)
         {
             this.parserService = parserService;
         }
 
-        private string nmeaMessage = string.Empty;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public string NmeaMessage
         {
@@ -21,11 +25,23 @@ namespace Autocomp.Nmea.TestApp.ViewModels
             set { nmeaMessage = value; RaisePropertyChanged(); }
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public object? ParsedMessage
+        {
+            get => parsedMessage;
+            set { parsedMessage = value; RaisePropertyChanged(); }
+        }
 
         public void RefreshNMEAPreview()
         {
-            //TODO
+            try
+            {
+                ParsedMessage = parserService.Parse(NmeaMessage, false);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Wyświetlić wyjątek
+                ParsedMessage = null;
+            }
         }
 
         protected void RaisePropertyChanged([CallerMemberName] string? propertyName = null) =>

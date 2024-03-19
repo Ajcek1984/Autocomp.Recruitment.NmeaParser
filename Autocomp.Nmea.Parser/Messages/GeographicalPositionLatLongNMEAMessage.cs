@@ -10,7 +10,7 @@ namespace Autocomp.Nmea.Parser.Messages
     {
         [NMEATalkerDevice]
         [Display(ResourceType = typeof(CommonResources), Name = nameof(CommonResources.TalkerDevice))]
-        public NMEATalkerDevices TalkerDevice { get;set; }
+        public NMEATalkerDevices TalkerDevice { get; set; }
 
         [NMEAField(0)]
         [Display(ResourceType = typeof(CommonResources), Name = nameof(CommonResources.Latitude))]
