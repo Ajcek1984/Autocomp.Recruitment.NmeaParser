@@ -13,17 +13,22 @@
             <RowDefinition Height="Auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Grid>
+        <Grid Margin="8">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="200" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <Label Content="Komunikat NMEA:"></Label>
+            <TextBlock Text="Komunikat NMEA:" HorizontalAlignment="Left"></TextBlock>
             <TextBox Grid.Column="1" Text="{Binding NmeaMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextChanged="TextBox_TextChanged"></TextBox>
         </Grid>
         <controls:PropertyViewer Grid.Row="1" 
                                  ObjectToDisplay="{Binding ParsedMessage}" 
                                  IsEnabled="False"
                                  Visibility="{Binding ParsedMessage, Converter={StaticResource NullToVisibilityConverter}}" />
+        <TextBlock Margin="6" 
+                   Grid.Row="1"
+                   Text="{Binding ErrorMessage}"
+                   TextWrapping="WrapWithOverflow"
+                   Visibility="{Binding ParsedMessage, Converter={StaticResource NullToVisibilityConverter}, ConverterParameter=negate}"/>
     </Grid>
 </Window>

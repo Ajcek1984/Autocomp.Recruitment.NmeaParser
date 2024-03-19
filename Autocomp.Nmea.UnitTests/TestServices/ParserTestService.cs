@@ -1,5 +1,6 @@
 ﻿using Autocomp.Nmea.Common;
 using Autocomp.Nmea.Parser.Enums;
+using Autocomp.Nmea.Parser.Extensions;
 using Autocomp.Nmea.Parser.Messages;
 using Autocomp.Nmea.Parser.Services;
 
@@ -63,8 +64,11 @@ namespace Autocomp.Nmea.UnitTests.TestServices
         private void Test(string rawMessage, object assertionObject, bool disableFastStrategies)
         {
             var message = new NmeaMessage(rawMessage);
-            //Wykomentowuję, bo coś jest nie tak albo z metodą NmeaCrcCalculator.CRC albo z CRC w przykładach wiadomości z Internetu:
-            //Assert.AreEqual(NmeaCrcCalculator.CRC(message), message.GetCrc());
+            
+            var calculatedCrc = message.CalculateCrc();
+            var embeddedCrc = message.GetCrc();
+            Assert.AreEqual(calculatedCrc, embeddedCrc);
+
             var result = parser.Parse(message, disableFastStrategies);
             Assert.IsTrue(result.GetType() == assertionObject.GetType());
             foreach (var property in assertionObject.GetType().GetProperties())

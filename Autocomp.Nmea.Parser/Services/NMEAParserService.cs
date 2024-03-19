@@ -10,6 +10,7 @@ namespace Autocomp.Nmea.Parser.Services
     {
         private readonly NMEAPropertyCache cache;
         private readonly IEnumerable<IFastNMEAParsingStrategy> fastStrategies;
+
         public NMEAParserService(IEnumerable<IFastNMEAParsingStrategy> fastStrategies, NMEAPropertyCache cache)
         {
             this.fastStrategies = fastStrategies;
@@ -22,8 +23,16 @@ namespace Autocomp.Nmea.Parser.Services
 
         public object Parse(NmeaMessage message, bool disableFastStrategies)
         {
+            if (!message.Header.StartsWith(message.Format.Prefix))
+                throw new InvalidDataException($"Wiadomość powinna zaczynać się od prefiksu {message.Format.Prefix}.");
+
             if (message.Header.Length < 4)
                 throw new InvalidDataException("Nagłówek jest za krótki");
+
+            var calculatedCrc = message.CalculateCrc();
+            var embeddedCrc = message.GetCrc();
+            if (calculatedCrc != embeddedCrc)
+                throw new InvalidDataException($"Niewłaściwe CRC.");
 
             var identifier = message.Header[3..];
             var talkerDevice = message.GetTalkerDevice();

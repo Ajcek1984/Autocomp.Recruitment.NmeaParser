@@ -8,16 +8,22 @@ namespace Autocomp.Nmea.TestApp.ViewModels
     {
         private readonly NMEAParserService parserService;
 
+        private string? errorMessage;
         private string nmeaMessage = string.Empty;
 
         private object? parsedMessage;
-
         public MainWindowViewModel(NMEAParserService parserService)
         {
             this.parserService = parserService;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
+
+        public string? ErrorMessage
+        {
+            get => errorMessage;
+            set { errorMessage = value; RaisePropertyChanged(); }
+        }
 
         public string NmeaMessage
         {
@@ -30,7 +36,6 @@ namespace Autocomp.Nmea.TestApp.ViewModels
             get => parsedMessage;
             set { parsedMessage = value; RaisePropertyChanged(); }
         }
-
         public void RefreshNMEAPreview()
         {
             try
@@ -39,7 +44,7 @@ namespace Autocomp.Nmea.TestApp.ViewModels
             }
             catch (Exception ex)
             {
-                //TODO: Wyświetlić wyjątek
+                ErrorMessage = $"Parsowanie nieudane. Treść błędu: {ex.Message}{(ex.Message.EndsWith(".") ? "" : ".")}";
                 ParsedMessage = null;
             }
         }
