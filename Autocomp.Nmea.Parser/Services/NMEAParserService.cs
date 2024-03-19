@@ -60,7 +60,6 @@ namespace Autocomp.Nmea.Parser.Services
                 throw new InvalidDataException(CommonResources.InvalidCRC);
 
             var identifier = message.Header[3..];
-            var talkerDevice = message.GetTalkerDevice();
             var queue = new Queue<string>(SanitizeValues(message.Fields, message.Format.Suffix));
             var fastStrategy = !disableFastStrategies ? fastStrategies.FirstOrDefault(s => s.Identifier == identifier) : null;
             if (fastStrategy != null)
