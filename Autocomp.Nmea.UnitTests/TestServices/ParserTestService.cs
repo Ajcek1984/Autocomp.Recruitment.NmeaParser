@@ -39,7 +39,7 @@ namespace Autocomp.Nmea.UnitTests.TestServices
                     }
                 },
                 {
-                    "$GPGLL,3953.88008971,N,10506.75318910,W,034138.11,A,D*7A\r\n", new GeographicalPositionLatLongNMEAMessage
+                    "$GPGLL,3953.88008971,N,10506.75318910,W,034138.00,A,D*7A\r\n", new GeographicalPositionLatLongNMEAMessage
                     {
                         Latitude = 3953.88008971m,
                         LatitudeType = LatitudeTypes.North,
