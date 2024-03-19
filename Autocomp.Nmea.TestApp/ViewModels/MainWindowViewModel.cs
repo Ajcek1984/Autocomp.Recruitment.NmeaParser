@@ -23,6 +23,11 @@ namespace Autocomp.Nmea.TestApp.ViewModels
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
+        public void RefreshNMEAPreview()
+        {
+            //TODO
+        }
+
         protected void RaisePropertyChanged([CallerMemberName] string? propertyName = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

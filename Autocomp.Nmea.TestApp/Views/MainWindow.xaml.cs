@@ -17,5 +17,10 @@ namespace Autocomp.Nmea.TestApp.Views
             ViewModel = ((App)Application.Current).DependencyScope.ServiceProvider.GetRequiredService<MainWindowViewModel>();
             DataContext = ViewModel;
         }
+
+        private void TextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            ViewModel.RefreshNMEAPreview();
+        }
     }
 }
