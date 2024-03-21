@@ -7,13 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Autocomp.Nmea.Common\Autocomp.Nmea.Common.csproj" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-      <HintPath>..\..\..\Nuget Packages\microsoft.extensions.dependencyinjection.abstractions\8.0.0\lib\net7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Autocomp.Nmea.Common\Autocomp.Nmea.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>

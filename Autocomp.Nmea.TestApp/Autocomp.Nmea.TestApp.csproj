@@ -17,10 +17,4 @@
     <ProjectReference Include="..\Autocomp.Nmea.Parser\Autocomp.Nmea.Parser.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-      <HintPath>..\..\..\Nuget Packages\microsoft.extensions.dependencyinjection.abstractions\8.0.0\lib\net7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
